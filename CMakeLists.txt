@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
-project(Hex2Ascii)
+project(MyLittleTool)
 
 set(CMAKE_CXX_STANDARD 14)
-
 
 # 使用Visual Studio编译额外的修改
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
@@ -12,16 +11,14 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     add_compile_options(/utf-8)
 endif ()
 
+add_executable(Hex2Ascii Hex2Ascii.cpp)
+add_executable(Ascii2Hex Ascii2Hex.cpp)
 
-add_executable(Hex2Ascii Hex2Ascii_main.cpp)
-add_executable(Ascii2Hex Ascii2Hex_main.cpp)
-
-add_executable(RamTest ram_test_main.cpp)
-add_executable(Linear11Trans Linear11Trans.cpp)
-add_executable(Linear16Trans Linear16Trans.cpp)
+add_executable(RamTest RamTest.cpp)
 add_executable(CheckEndian CheckEndian.cpp)
 
+add_executable(Linear11Trans Linear11Trans.cpp)
+add_executable(Linear16Trans Linear16Trans.cpp)
 
-install(TARGETS Hex2Ascii DESTINATION ${CMAKE_INSTALL_LIBDIR})
-install(TARGETS Ascii2Hex DESTINATION ${CMAKE_INSTALL_LIBDIR})
-install(TARGETS RamTest DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(TARGETS Hex2Ascii DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS Ascii2Hex DESTINATION ${CMAKE_INSTALL_BINDIR})
