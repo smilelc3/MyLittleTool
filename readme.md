@@ -10,7 +10,15 @@
 检测当前是大小端
 
 ### RamTest
-占用指定内存，可用用作压力测试
+占用指定内存，可用作内存压力测试
+
+### DiskTest
+反复写入随机数到文件，可用作硬盘寿命测试
+```bash
+# 用法 DiskTest {写入文件的路径} {写入的数据量/M}
+./DiskTest "/data/test.bin" 1024
+# 如上，写入1G文件数据到 /data/test.bin
+```
 
 ### Linear11Trans
 Linear11 格式转换为实数

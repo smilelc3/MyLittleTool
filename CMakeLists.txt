@@ -11,10 +11,16 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     add_compile_options(/utf-8)
 endif ()
 
+if (NOT CMAKE_BUILD_TYPE)
+    SET(CMAKE_BUILD_TYPE "Release")
+    message (STATUS "No CMAKE_BUILD_TYPE selected, defaulting to ${CMAKE_BUILD_TYPE}")
+endif ()
+
 add_executable(Hex2Ascii Hex2Ascii.cpp)
 add_executable(Ascii2Hex Ascii2Hex.cpp)
 
 add_executable(RamTest RamTest.cpp)
+add_executable(DiskTest DiskTest.cpp)
 add_executable(CheckEndian CheckEndian.cpp)
 
 add_executable(Linear11Trans Linear11Trans.cpp)
