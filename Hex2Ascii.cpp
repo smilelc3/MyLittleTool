@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <limits>
 #ifdef _MSC_VER
 #include <fcntl.h>
 #include <io.h>
@@ -39,29 +40,31 @@ string RemoveHexPrefix(string &hex) {
     return hex;
 }
 
+
+const wchar_t UNICODE_REPLACEMENT_CHAR = 0xFFFD;
+
 // 单个hex转ASCII
 wchar_t StringHex2Ascii(string &hex) {
     // 可能的16进制表示形式: 0x12 AB ab 0xFa 0x1 6 0X12 x16 X0C
     hex = RemoveHexPrefix(hex);
     if (hex.empty() or hex.size() > 2) {
-        return 0xFFFD;
+        return UNICODE_REPLACEMENT_CHAR;
     }
     int ascii = 0;
     for (const auto &val: hex) {
         ascii *= 0x10;
         if ('0' <= val and val <= '9') {
             ascii += val - '0';
-
         } else if ('A' <= val and val <= 'F') {
             ascii += 10 + val - 'A';
         } else if ('a' <= val and val <= 'f') {
             ascii += 10 + val - 'a';
         } else {
-            return 0xFFFD;
+            return UNICODE_REPLACEMENT_CHAR;
         }
     }
-    if (ascii > 127) {
-        return 0xFFFD;
+    if (ascii > std::numeric_limits<signed char>::max()) {
+        return UNICODE_REPLACEMENT_CHAR;
     }
     return ascii;
 }

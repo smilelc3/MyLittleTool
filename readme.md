@@ -25,3 +25,8 @@ Linear11 格式转换为实数
 
 ### Linear16Trans
 Linear16 格式转换为实数
+
+### ByteAcc
+DediProg 工具中 ByteACC 校验算法异步实现
+> Algorithm Description:   
+> Sum the data bytes byte by byte and disregard any carry beyond 32 bits. 

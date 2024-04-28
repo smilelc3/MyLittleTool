@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
 project(MyLittleTool)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_C_STANDARD 99)
+
 
 # 使用Visual Studio编译额外的修改
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
@@ -25,6 +27,8 @@ add_executable(CheckEndian CheckEndian.cpp)
 
 add_executable(Linear11Trans Linear11Trans.cpp)
 add_executable(Linear16Trans Linear16Trans.cpp)
+
+add_executable(ByteAcc checksum_byteacc.cpp)
 
 install(TARGETS Hex2Ascii DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(TARGETS Ascii2Hex DESTINATION ${CMAKE_INSTALL_BINDIR})
