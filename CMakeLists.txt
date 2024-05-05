@@ -30,5 +30,8 @@ add_executable(Linear16Trans Linear16Trans.cpp)
 
 add_executable(ByteAcc checksum_byteacc.cpp)
 
-install(TARGETS Hex2Ascii DESTINATION ${CMAKE_INSTALL_BINDIR})
-install(TARGETS Ascii2Hex DESTINATION ${CMAKE_INSTALL_BINDIR})
+add_executable(RandomMac RandomMac.cpp)
+
+#install(TARGETS Hex2Ascii DESTINATION ${CMAKE_INSTALL_BINDIR})
+#install(TARGETS Ascii2Hex DESTINATION ${CMAKE_INSTALL_BINDIR})
+

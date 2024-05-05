@@ -30,3 +30,6 @@ Linear16 格式转换为实数
 DediProg 工具中 ByteACC 校验算法异步实现
 > Algorithm Description:   
 > Sum the data bytes byte by byte and disregard any carry beyond 32 bits. 
+
+### RandomMac
+生成随机Mac地址 
