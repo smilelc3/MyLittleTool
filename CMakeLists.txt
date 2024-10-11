@@ -18,6 +18,8 @@ if (NOT CMAKE_BUILD_TYPE)
     message (STATUS "No CMAKE_BUILD_TYPE selected, defaulting to ${CMAKE_BUILD_TYPE}")
 endif ()
 
+find_package(Threads REQUIRED)
+
 add_executable(Hex2Ascii Hex2Ascii.cpp)
 add_executable(Ascii2Hex Ascii2Hex.cpp)
 
@@ -29,12 +31,22 @@ add_executable(Linear11Trans Linear11Trans.cpp)
 add_executable(Linear16Trans Linear16Trans.cpp)
 
 add_executable(ByteAcc checksum_byteacc.cpp)
-target_link_libraries(ByteAcc pthread)
+target_link_libraries(ByteAcc PUBLIC Threads::Threads)
 
 add_executable(RandomMac RandomMac.cpp)
 
 add_executable(Crc8 Crc8.c)
+target_link_libraries(Crc8 PUBLIC Threads::Threads)
 
-#install(TARGETS Hex2Ascii DESTINATION ${CMAKE_INSTALL_BINDIR})
-#install(TARGETS Ascii2Hex DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS Hex2Ascii DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS Ascii2Hex DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS RamTest DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS DiskTest DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS CheckEndian DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS Linear11Trans DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS Linear16Trans DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS ByteAcc DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS RandomMac DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS Crc8 DESTINATION ${CMAKE_INSTALL_BINDIR})
+
 
