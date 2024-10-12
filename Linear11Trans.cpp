@@ -1,6 +1,8 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <cstdint>
+
 // 位操作
 #define getBit(n, idx) ((n) >> (idx) & 1)           // 获取某一位值
 #define bitMask(n)  ((1ULL << (n)) - 1)

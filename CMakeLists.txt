@@ -21,17 +21,26 @@ endif ()
 find_package(Threads REQUIRED)
 
 add_executable(Hex2Ascii Hex2Ascii.cpp)
+target_link_options(Hex2Ascii PRIVATE "-static")
+
 add_executable(Ascii2Hex Ascii2Hex.cpp)
+target_link_options(Ascii2Hex PRIVATE "-static")
 
 add_executable(RamTest RamTest.cpp)
+
 add_executable(DiskTest DiskTest.cpp)
 add_executable(CheckEndian CheckEndian.cpp)
 
 add_executable(Linear11Trans Linear11Trans.cpp)
+target_link_options(Linear11Trans PRIVATE "-static")
+
 add_executable(Linear16Trans Linear16Trans.cpp)
+target_link_options(Linear16Trans PRIVATE "-static")
 
 add_executable(ByteAcc checksum_byteacc.cpp)
 target_link_libraries(ByteAcc PUBLIC Threads::Threads)
+target_link_options(ByteAcc PRIVATE "-static")
+
 
 add_executable(RandomMac RandomMac.cpp)
 

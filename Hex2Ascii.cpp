@@ -2,10 +2,6 @@
 #include <string>
 #include <vector>
 #include <limits>
-#ifdef _MSC_VER
-#include <fcntl.h>
-#include <io.h>
-#endif
 
 using namespace std;
 
@@ -82,10 +78,6 @@ wstring Hex2Ascii(const std::string& input) {
 }
 
 int main(int argc, char *argv[]) {
-    locale::global(locale(""));
-#ifdef _MSC_VER
-    _setmode(_fileno(stdout), _O_U16TEXT);
-#endif
     if (argc == 2) {
         std::wcout << Hex2Ascii(argv[1]) << std::endl;
     }
