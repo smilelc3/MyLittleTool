@@ -2,6 +2,14 @@
 #include <string>
 #include <vector>
 #include <limits>
+#include <codecvt>
+#include <locale>
+
+#ifdef _WIN32
+
+#include <Windows.h>
+
+#endif
 
 using namespace std;
 
@@ -67,19 +75,28 @@ wchar_t StringHex2Ascii(string &hex) {
 
 
 // 函数入口
-wstring Hex2Ascii(const std::string& input) {
+wstring Hex2Ascii(const std::string &input) {
     string delimiter = " ";     // 以空格为分隔符
     auto split = StringSplit(input, delimiter);
     wstring output;
     for (auto &&hex: split) {
         output += StringHex2Ascii(hex);
     }
-    return output;
+    return std::move(output);
 }
 
+
 int main(int argc, char *argv[]) {
-    if (argc == 2) {
-        std::wcout << Hex2Ascii(argv[1]) << std::endl;
+    if (argc != 2) {
+        return 0;
     }
+    // 优先转换为 utf-8
+    std::wstring unicodeStr = Hex2Ascii(argv[1]);
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> u8Conv;
+    auto utf8Str = u8Conv.to_bytes(unicodeStr);
+#ifdef WIN32
+    SetConsoleOutputCP(CP_UTF8);    // windows 设置控制台输出为UTF-8编码，其他Unix/Linux默认为UTF-8
+#endif
+    std::cout << utf8Str << std::endl;
     return 0;
 }
