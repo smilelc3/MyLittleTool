@@ -88,19 +88,17 @@ string Hex2Ascii(const std::string &input) {
 }
 
 
-
 // 用于 wasm
 #ifdef WASM_EMCC
 #include <emscripten.h>
 extern "C" {
     EMSCRIPTEN_KEEPALIVE
-    const char* C_hex2Ascii(const char *input) {
+    const char* C_Hex2Ascii(const char *input) {
         auto str = Hex2Ascii(input);
-        return str.str();
+        return strdup(str.c_str());
     }
 }
-#endif
-
+#else
 int main(int argc, char *argv[]) {
     if (argc != 2) {
         return 0;
@@ -112,3 +110,4 @@ int main(int argc, char *argv[]) {
     std::cout << utf8Str << std::endl;
     return 0;
 }
+#endif

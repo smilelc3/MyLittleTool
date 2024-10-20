@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <sstream>
 #include <cstdint>
 
 // 位操作
@@ -35,11 +36,26 @@ double Linear11ToDouble(uint16_t word) {
     return isManNeg ? -ans : ans;
 }
 
+
+// 用于 wasm
+#ifdef WASM_EMCC
+#include <emscripten.h>
+extern "C" {
+    EMSCRIPTEN_KEEPALIVE
+    const char* C_Linear11Trans(const char *input) {
+        auto val = std::stoul(input, nullptr, 0);
+        std::ostringstream output;
+        output << std::setprecision(4) << Linear11ToDouble(val);
+        return strdup(output.str().c_str());
+    }
+}
+#else
 int main(int argc, char *argv[]) {
     if (argc == 2) {
         std::string linear11Str = argv[1];
         auto val = std::stoul(linear11Str, nullptr, 0);
-        std::cout << std::setprecision(3) << Linear11ToDouble(val) << std::endl;
+        std::cout << std::setprecision(4) << Linear11ToDouble(val) << std::endl;
     }
     return 0;
 }
+#endif
