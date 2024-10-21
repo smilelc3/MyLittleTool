@@ -4,6 +4,8 @@
 #include <future>
 #include <iomanip>
 #include <numeric>
+#include <sstream>
+
 
 // 读取数据块的任务函数
 std::vector<char> readBlock(const std::string &filename, std::streampos start, std::streampos end) {
@@ -27,7 +29,7 @@ inline uint32_t processBlock(const std::vector<char> &buffer) {
 }
 
 
-int byteacc(const std::string &filename) {
+int ByteAccByFile(const std::string &filename) {
     std::ifstream file(filename, std::ios::binary);
     if (file.fail()) {
         std::cerr << "unable open file" << std::endl;
@@ -70,13 +72,32 @@ int byteacc(const std::string &filename) {
 
     // 计算总的字节访问计数
     unsigned int totalByteacc = std::accumulate(byteaccs.begin(), byteaccs.end(), 0u);
-    std::cout << "byteacc: 0x" << std::hex << std::uppercase << std::setw(8) << std::setfill('0') << totalByteacc << std::endl;
+    std::cout << "byteacc: 0x" << std::hex << std::uppercase << std::setw(8) << std::setfill('0') << totalByteacc
+              << std::endl;
     std::cout << "cost time: " << static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(
-        endTime - starTime).count()) / 1000 << "s" << std::endl;
+            endTime - starTime).count()) / 1000 << "s" << std::endl;
 
     return 0;
 }
 
-int main(int argc, char *argv[]) {
-    return byteacc(std::string(argv[1]));
+// 用于 wasm
+#ifdef WASM_EMCC
+#include <emscripten.h>
+
+extern "C" {
+    EMSCRIPTEN_KEEPALIVE
+    const char* C_ByteAccByMem(const char* buffer, uint64_t length) {
+        std::vector<char> data(buffer, buffer + length);
+        auto byteAcc = processBlock(data);
+        std::stringstream output;
+        output << "0x" << std::hex << std::uppercase << std::setw(8) << std::setfill('0') << byteAcc;
+        return strdup(output.str().c_str());
+    }
 }
+#else
+
+int main(int argc, char *argv[]) {
+    return ByteAccByFile(std::string(argv[1]));
+}
+
+#endif
