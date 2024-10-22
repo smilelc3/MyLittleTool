@@ -87,8 +87,10 @@ int ByteAccByFile(const std::string &filename) {
 extern "C" {
     EMSCRIPTEN_KEEPALIVE
     const char* C_ByteAccByMem(const char* buffer, uint64_t length) {
-        std::vector<char> data(buffer, buffer + length);
-        auto byteAcc = processBlock(data);
+        uint32_t byteAcc = 0;
+        for (uint64_t idx = 0; idx < length; ++idx) {
+            byteAcc += buffer[idx];
+        }
         std::stringstream output;
         output << "0x" << std::hex << std::uppercase << std::setw(8) << std::setfill('0') << byteAcc;
         return strdup(output.str().c_str());
