@@ -6,7 +6,7 @@
 #include <locale>
 
 #ifdef _WIN32
-#define NOMINMAX    // 禁用win自带的min max
+#define NOMINMAX 1    // 禁用win自带的min max
 #include <Windows.h>
 #endif
 
@@ -79,7 +79,9 @@ string Hex2Ascii(const std::string &input) {
     auto split = StringSplit(input, delimiter);
     wstring unicodeStr;
     for (auto &&hex: split) {
-        unicodeStr += StringHex2Ascii(hex);
+        if (not hex.empty()) {
+            unicodeStr += StringHex2Ascii(hex);
+        }
     }
     // 转换为utf-8
     std::wstring_convert<std::codecvt_utf8<wchar_t>> u8Conv;
