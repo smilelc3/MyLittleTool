@@ -2,14 +2,10 @@
 #include <sstream>
 #include <iomanip>
 
-using namespace std;
-
-// 函数入口
-
-string Ascii2Hex(const std::string &input) {
-    ostringstream output;
+std::string Ascii2Hex(const std::string &input) {
+    std::ostringstream output;
     for (const auto &ch: input) {
-        output << "0x" << hex << setw(2) << static_cast<unsigned short>(ch) << " ";
+        output << "0x" << std::setfill('0') << std::setw(2) << std::hex << static_cast<unsigned short>(ch) << " ";
     }
     return output.str();
 }
