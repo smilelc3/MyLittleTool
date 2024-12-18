@@ -4,11 +4,10 @@
 #include <future>
 #include <iomanip>
 #include <numeric>
-#include <sstream>
 
 
 // 读取数据块的任务函数
-std::vector<char> readBlock(const std::string &filename, std::streampos start, std::streampos end) {
+std::vector<uint8_t> readBlock(const std::string &filename, std::streampos start, std::streampos end) {
     std::ifstream file(filename, std::ios::binary);
     if (file.fail()) {
         std::cerr << "unable to open file" << std::endl;
@@ -17,14 +16,14 @@ std::vector<char> readBlock(const std::string &filename, std::streampos start, s
     // 定位到数据块开始处
     file.seekg(start);
     // 读取数据块
-    std::vector<char> buffer(end - start);
-    file.read(buffer.data(), static_cast<long long>(buffer.size()));
+    std::vector<uint8_t> buffer(end - start);
+    file.read(reinterpret_cast<char *>(buffer.data()), buffer.size());
     file.close();
     return buffer;
 }
 
 // 处理数据块的函数
-inline uint32_t processBlock(const std::vector<char> &buffer) {
+inline uint32_t processBlock(const std::vector<uint8_t> &buffer) {
     return std::accumulate(buffer.begin(), buffer.end(), 0u);
 }
 
@@ -48,8 +47,8 @@ int ByteAccByFile(const std::string &filename) {
     std::streampos blockSize = fileSize / nproc;
 
     // 创建并初始化每个线程的异步任务
-    std::vector<std::future<std::vector<char> > > readTasks;
-    std::vector<std::future<unsigned int> > processTasks;
+    std::vector<std::future<std::vector<uint8_t> > > readTasks;
+    std::vector<std::future<uint32_t> > processTasks;
 
     // 异步读取和处理每个数据块
     auto starTime = std::chrono::high_resolution_clock::now();
@@ -63,7 +62,7 @@ int ByteAccByFile(const std::string &filename) {
     }
 
     // 等待所有处理任务完成并获取结果
-    std::vector<unsigned int> byteaccs;
+    std::vector<uint32_t> byteaccs;
     byteaccs.reserve(processTasks.size());
     for (auto &task: processTasks) {
         byteaccs.emplace_back(task.get());
@@ -71,8 +70,8 @@ int ByteAccByFile(const std::string &filename) {
     auto endTime = std::chrono::high_resolution_clock::now();
 
     // 计算总的字节访问计数
-    unsigned int totalByteacc = std::accumulate(byteaccs.begin(), byteaccs.end(), 0u);
-    std::cout << "byteacc: 0x" << std::hex << std::uppercase << std::setw(8) << std::setfill('0') << totalByteacc
+    uint32_t totalByteAcc = std::accumulate(byteaccs.begin(), byteaccs.end(), 0u);
+    std::cout << "byteacc: 0x" << std::hex << std::uppercase << std::setfill('0') << totalByteAcc
               << std::endl;
     std::cout << "cost time: " << static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(
             endTime - starTime).count()) / 1000 << "s" << std::endl;
@@ -86,9 +85,9 @@ int ByteAccByFile(const std::string &filename) {
 
 extern "C" {
     EMSCRIPTEN_KEEPALIVE
-    const char* C_ByteAccByMem(const char* buffer, uint64_t length) {
+    const char* C_ByteAccByMem(const char* buffer, uint32_t length) {
         uint32_t byteAcc = 0;
-        for (uint64_t idx = 0; idx < length; ++idx) {
+        for (uint32_t idx = 0; idx < length; ++idx) {
             byteAcc += buffer[idx];
         }
         std::stringstream output;
