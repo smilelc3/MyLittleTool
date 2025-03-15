@@ -47,6 +47,9 @@ add_executable(RandomMac RandomMac.cpp)
 add_executable(Crc8 Crc8.c)
 target_link_libraries(Crc8 PUBLIC Threads::Threads)
 
+add_executable(DateTimeCalc DateTimeCalc.cpp)
+target_link_options(DateTimeCalc PRIVATE "-static")
+
 install(TARGETS Hex2Ascii DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(TARGETS Ascii2Hex DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(TARGETS RamTest DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -57,5 +60,6 @@ install(TARGETS Linear16Trans DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(TARGETS ByteAcc DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(TARGETS RandomMac DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(TARGETS Crc8 DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS DateTimeCalc DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 
